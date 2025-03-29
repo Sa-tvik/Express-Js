@@ -1,16 +1,18 @@
-import { Router } from "express"; 
+import express from "express"; 
 import { query, validationResult, checkSchema, matchedData } from "express-validator";
 import { mockUsers } from "../utils/constants.js";
 import { createUserValidationSchema } from "../utils/validationSchemas.js";
 import { resolveIndexUserById } from "../utils/middlewares.js";
 
-const router = Router();
+const router = express.Router();
 
 router.get("/api/users",
     query('filter')
     .isString()
     .notEmpty(),
     (request, response) => {
+    console.log(request.session);
+    console.log(request.session.id);
     const result =  validationResult(request);
     console.log(result);
     console.log(request.query);
@@ -37,7 +39,6 @@ router.post(
     '/api/users',
     checkSchema(createUserValidationSchema),
     (request, response) =>{ 
-
     const result = validationResult(request);
     console.log(result);
     if(!result.isEmpty())
@@ -52,7 +53,6 @@ router.post(
 //Only the change remains
 router.put("/api/users/:id",resolveIndexUserById, (request, response) =>{
     const { body, findUserIndex } = request;
-    
     mockUsers[findUserIndex] = {id: mockUsers[findUserIndex].id, ...body };
     return response.sendStatus(200)
 })

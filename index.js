@@ -1,7 +1,7 @@
 import express, { request } from 'express';
 import routes from "./routes/index.js"
-import cookieParser from 'cookie-parser';
-import session from 'express-session';
+import cookieParser from "cookie-parser";
+import session from "express-session";
 
 const app = express();
 
@@ -30,6 +30,7 @@ const PORT = process.env.PORT || 3000;
 app.get("/", (request, response) => {
     console.log(request.session);
     console.log(request.session.id);
+    request.session.visited = true;
     response.cookie('hello','world', {maxAge: 60000, signed: true })
     response.status(201).send({msg:"hello"})
 })
